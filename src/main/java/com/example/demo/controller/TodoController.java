@@ -99,7 +99,7 @@ public class TodoController {
 			String temporaryUserId = "temporary-user"; // temporary user id.
 
 			TodoEntity entity = TodoDTO.toEntity(dto); //dto를 entity로 변환
-			entity.setUserId(temporaryUserId); //초기화
+			entity.setUserId(temporaryUserId); 
 
 			List<TodoEntity> entities = service.update(entity);
 			List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
@@ -115,6 +115,31 @@ public class TodoController {
 
 		}
 	}
+
+	//일정삭제
+	@DeleteMapping
+	public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto) {
+		try {
+			String temporaryUserId = "temporary-user"; // temporary user id.
+
+			TodoEntity entity = TodoDTO.toEntity(dto);
+			entity.setUserId(temporaryUserId);
+
+			List<TodoEntity> entities = service.delete(entity);
+			List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+
+			return ResponseEntity.ok().body(response);
+
+		}catch(Exception e) {
+
+			String error = e.getMessage();
+			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+			return ResponseEntity.badRequest().body(response);
+
+		}
+	}
+
 
 
 }

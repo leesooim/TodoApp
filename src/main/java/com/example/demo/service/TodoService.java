@@ -65,6 +65,24 @@ public class TodoService {
 		return retrieve(entity.getUserId());
 	}
 	
+	//일정삭제
+	public List<TodoEntity> delete(final TodoEntity entity) {
+		
+		validate(entity);
+		
+		try {
+			
+			repository.delete(entity);
+			
+		} catch(Exception e) {
+			
+			log.error("error deleting entity ", entity.getId(), e);
+			throw new RuntimeException("error deleting entity " + entity.getId());
+			
+		}
+		
+		return retrieve(entity.getUserId());
+	}
 	
 
 	//공통 검증코드 
@@ -79,6 +97,8 @@ public class TodoService {
 			log.warn("Unknown user.");
 			throw new RuntimeException("Unknown user.");
 		}
+		
+		System.out.println("Entity 확인 : "+ entity);
 		
 	}
 	
