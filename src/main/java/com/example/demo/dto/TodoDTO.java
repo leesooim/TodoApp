@@ -16,10 +16,12 @@ public class TodoDTO {
 
 	private UUID id;
 	private String title;
+	private String userId;
 	private boolean done;
 
 	public TodoDTO(final TodoEntity entity) {
 		this.id = entity.getId();
+		this.userId = entity.getUserId();
 		this.title = entity.getTitle();
 		this.done = entity.isDone();
 	}
@@ -28,6 +30,7 @@ public class TodoDTO {
 		return TodoEntity.builder()
 				.id(dto.getId())
 				.title(dto.getTitle())
+				.userId(dto.userId)
 				.done(dto.isDone())
 				.build();
 	}

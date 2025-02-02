@@ -30,16 +30,17 @@ public class TodoController {
 	@Autowired
 	private TodoService service;
 
-	@GetMapping("toodo")
-	public ResponseEntity<?> todoControllerResponseEntity() {
-		String str = service.testService();
-		List<String> list = new ArrayList<>();
-		list.add(str);
-		ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
+//	@GetMapping("toodo")
+//	public ResponseEntity<?> todoControllerResponseEntity() {
+//		String str = service.testService();
+//		List<String> list = new ArrayList<>();
+//		list.add(str);
+//		ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
+//
+//		return ResponseEntity.ok().body(response);
+//	}
 
-		return ResponseEntity.ok().body(response);
-	}
-
+	//일정저장 
 	@PostMapping
 	public ResponseEntity<?> createTodo(@RequestBody TodoDTO dto) {
 
@@ -66,8 +67,28 @@ public class TodoController {
 			return ResponseEntity.badRequest().body(response);
 
 		}
-
-
+	}
+	
+	//일정조회 
+	@GetMapping
+	public ResponseEntity<?> retrieveTodoList() {
+		
+		try {
+			String temporaryUserId = "temporary-user"; // temporary user id.
+			
+			List<TodoEntity> entities = service.retrieve(temporaryUserId);
+			List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+			
+			return ResponseEntity.ok().body(response);
+			
+		}catch(Exception e) {
+			
+			String error = e.getMessage();
+			ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+			return ResponseEntity.badRequest().body(response);
+			
+		}
 	}
 
 

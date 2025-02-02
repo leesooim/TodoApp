@@ -38,8 +38,20 @@ public class TodoService {
 		return repository.findByUserId(entity.getUserId());
 	}
 	
+	//일정조회 
+	public List<TodoEntity> retrieve(final String userId) {
+		
+		if(userId == null) {
+			log.warn("userId cannot be null.");
+			throw new RuntimeException("userId cannot be null.");
+		}
+		
+		return repository.findByUserId(userId);
+	}
+	
+	
 
-	//검증코드 
+	//공통 검증코드 
 	private void validate(final TodoEntity entity) {
 		
 		if(entity == null) {
