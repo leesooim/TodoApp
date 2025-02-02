@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,21 @@ public class TodoService {
 		}
 		
 		return repository.findByUserId(userId);
+	}
+	
+	//일정수정 
+	public List<TodoEntity> update(final TodoEntity entity) {
+		
+		validate(entity);
+		
+		final Optional<TodoEntity> original = repository.findById(entity.getId());
+		original.ifPresent(todo -> {
+			todo.setTitle(entity.getTitle());
+			todo.setDone(entity.isDone());
+			repository.save(todo);
+		});
+		
+		return retrieve(entity.getUserId());
 	}
 	
 	
